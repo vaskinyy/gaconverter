@@ -1,0 +1,6 @@
+click==6.6
+et-xmlfile==1.0.1
+jdcal==1.2
+openpyxl==2.3.5
+pyth==0.6.0
+wheel==0.24.0
