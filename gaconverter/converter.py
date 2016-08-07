@@ -41,6 +41,7 @@ class Converter(object):
             records_dict[record.number].append(record)
 
         self._process_workbook(records_dict)
+        logging.info("Processed {} items".format(len(records_dict)))
 
     def _parse_rtf_data(self):
         logging.info("Parsing GA file {}".format(self.rtf_path))
