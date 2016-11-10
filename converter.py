@@ -1,6 +1,7 @@
 import click
 
 from gaconverter.converter import Converter
+from gaconverter.allele_extractor import Extractor
 
 @click.group()
 def cli():
@@ -8,8 +9,11 @@ def cli():
 
 
 @click.command()
-def alleles():
-    click.echo('Dropped the database')
+@click.argument('xlsx_path', nargs=1)
+def allele(xlsx_path):
+    extractor = Extractor(xlsx_path)
+    extractor.run()
+
 
 @click.command()
 @click.argument('rtf_path', nargs=1)
@@ -19,7 +23,7 @@ def convert(rtf_path, xlsx_path):
     converter.run()
 
 cli.add_command(convert)
-cli.add_command(alleles)
+cli.add_command(allele)
 
 if __name__ == '__main__':
     cli()

@@ -6,8 +6,7 @@ from openpyxl import load_workbook
 from pyth.plugins.plaintext.writer import PlaintextWriter
 from pyth.plugins.rtf15.reader import Rtf15Reader
 
-ALLELE_COLUMNS_START = 5
-NUMBERS_COLUMN = 2
+from gaconverter.constants import ALLELE_COLUMNS_START, NUMBERS_COLUMN
 
 
 class GARecord(object):

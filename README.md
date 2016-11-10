@@ -7,3 +7,7 @@ python converter.py convert [PATH_TO_RTF] [PATH_TO_XLSX]
 ```
 Converted file will be created in the XLSX folder with modified name
 
+# How to run the allele extractor:
+```
+python converter.py allele [PATH_TO_XLSX]
+```
