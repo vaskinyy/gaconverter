@@ -8,6 +8,9 @@ from gaconverter.constants import ALLELE_COLUMNS_START, NUMBERS_COLUMN
 
 
 class Extractor(object):
+    """
+    Prints xlsx file
+    """
     def __init__(self, xlsx_path):
         self.xlsx_path = xlsx_path
 
@@ -58,6 +61,6 @@ class Extractor(object):
 
     def _validate(self):
         if not os.path.exists(self.xlsx_path):
-            logging.error("Cannot find xlsx file: %s!" % self.rtf_path)
+            logging.error("Cannot find xlsx file: %s!" % self.xlsx_path)
             return False
         return True

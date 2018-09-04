@@ -4,7 +4,6 @@ from collections import defaultdict
 
 from openpyxl import load_workbook
 from pyth.plugins.plaintext.writer import PlaintextWriter
-from pyth.plugins.rtf15.reader import Rtf15Reader
 
 from gaconverter.constants import ALLELE_COLUMNS_START, NUMBERS_COLUMN
 
@@ -27,14 +26,14 @@ class GARecord(object):
 
 
 class Converter(object):
-    def __init__(self, rtf_path, xlsx_path):
-        self.rtf_path = rtf_path
+    def __init__(self, txt_path, xlsx_path):
+        self.txt_path = txt_path
         self.xlsx_path = xlsx_path
 
     def run(self):
         if not self._validate():
             return
-        records = self._parse_rtf_data()
+        records = self._parse_data()
         records_dict = defaultdict(list)
         for record in records:
             records_dict[record.number].append(record)
@@ -42,12 +41,10 @@ class Converter(object):
         self._process_workbook(records_dict)
         logging.info("Processed {} items".format(len(records_dict)))
 
-    def _parse_rtf_data(self):
-        logging.info("Parsing GA file {}".format(self.rtf_path))
-        with open(self.rtf_path, "r") as rtf_file:
-            doc = Rtf15Reader.read(rtf_file)
-            res = PlaintextWriter.write(doc)
-            for line in res:
+    def _parse_data(self):
+        logging.info("Parsing GA file {}".format(self.txt_path))
+        with open(self.txt_path, "r") as txt_file:
+            for line in txt_file:
                 line = line.strip()
                 if not line:
                     continue
@@ -56,13 +53,13 @@ class Converter(object):
                     continue
                 record = GARecord()
                 try:
-                    record.number = int(columns[0])
-                except ValueError:
+                    record.number = int(columns[1].split(' ')[2])
+                except IndexError:
                     continue
-                record.allele = columns[1]
-                record.left = columns[2]
+                record.allele = columns[2]
+                record.left = columns[3]
                 if len(columns) >= 4:
-                    record.right = columns[3]
+                    record.right = columns[4]
                 if not record.valid():
                     logging.warning("Skipping invalid record {}".format(line))
                     continue
@@ -123,11 +120,11 @@ class Converter(object):
         wb.save(self.xlsx_path[:-5] + "_new" + ".xlsx")
 
     def _validate(self):
-        if not os.path.exists(self.rtf_path):
-            logging.error("Cannot find rtf file: %s!" % self.rtf_path)
+        if not os.path.exists(self.txt_path):
+            logging.error("Cannot find txt file: %s!" % self.txt_path)
             return False
 
         if not os.path.exists(self.xlsx_path):
-            logging.error("Cannot find xlsx file: %s!" % self.rtf_path)
+            logging.error("Cannot find xlsx file: %s!" % self.txt_path)
             return False
         return True
